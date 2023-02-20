@@ -1,4 +1,3 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import { AuthComponent } from "./Components/authComponent";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { HomeComponent } from "./Components/HomeComponent";

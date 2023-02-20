@@ -1,9 +1,13 @@
+import axios from "axios";
 import React, { useState } from "react";
-import styles from "../App.module.css";
-console.log(styles);
+import { useNavigate } from "react-router-dom";
+import "./AuthComponent.css";
+
 export const AuthComponent = () => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+
+  const navigate = useNavigate();
 
   const onEmailChange = ({ target }) => {
     setEmail(target.value);
@@ -15,16 +19,19 @@ export const AuthComponent = () => {
   };
 
   const onLogin = async () => {
-    const resp = await axios.post("http://localhost:8080/auth/login", {
+    const { data } = await axios.post("http://localhost:8080/auth/login", {
       email,
       password: pass,
     });
-    console.log(resp);
+    if (data != null && data.token != null) {
+      sessionStorage.setItem("token", data.token);
+      navigate("/");
+    }
   };
 
   return (
     <div className="Auth-form-container">
-      <form className="Auth-form">
+      <div className="Auth-form">
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">Login</h3>
           <div className="form-group mt-3">
@@ -53,7 +60,7 @@ export const AuthComponent = () => {
             </button>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };
