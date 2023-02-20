@@ -12,7 +12,6 @@ export const AuthComponent = () => {
 
   const onEmailChange = ({ target }) => {
     setEmail(target.value);
-    console.log(email);
   };
 
   const onPassChange = ({ target }) => {
@@ -27,7 +26,7 @@ export const AuthComponent = () => {
         password: pass,
       }
     );
-    console.log(status);
+    console.log(data);
 
     if (status != 200) {
       console.log(status);
