@@ -18,27 +18,27 @@ export const AuthComponent = () => {
     setPass(target.value);
   };
 
-  const onLogin = async () => {
-    const { data, status } = await axios.post(
-      "http://localhost:8080/auth/login",
-      {
-        email,
-        password: pass,
-      }
-    );
-    console.log(data);
-
-    if (status != 200) {
-      console.log(status);
+  const onLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const { data, status } = await axios.post(
+        "http://localhost:8080/auth/login",
+        {
+          email,
+          password: pass,
+        }
+      );
+      sessionStorage.setItem("token", data.token);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
       setErrorText("Usuario o Contraseña inválidas");
       return;
     }
-    sessionStorage.setItem("token", data.token);
-    navigate("/");
   };
 
   return (
-    <div className="Auth-form-container">
+    <form onSubmit={onLogin} className="Auth-form-container">
       <div className="Auth-form">
         <div className="Auth-form-content">
           <h3 className="Auth-form-title">Login</h3>
@@ -62,14 +62,12 @@ export const AuthComponent = () => {
               onChange={onPassChange}
             />
           </div>
-          <p>{errorText}</p>
+          <p className="text-danger">{errorText}</p>
           <div className="d-grid gap-2 mt-3">
-            <button className="btn btn-primary" onClick={onLogin}>
-              Ingresar
-            </button>
+            <button className="btn btn-primary">Ingresar</button>
           </div>
         </div>
       </div>
-    </div>
+    </form>
   );
 };
