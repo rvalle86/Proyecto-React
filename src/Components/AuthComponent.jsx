@@ -6,6 +6,7 @@ import "./AuthComponent.css";
 export const AuthComponent = () => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [errorText, setErrorText] = useState("");
 
   const navigate = useNavigate();
 
@@ -19,14 +20,22 @@ export const AuthComponent = () => {
   };
 
   const onLogin = async () => {
-    const { data } = await axios.post("http://localhost:8080/auth/login", {
-      email,
-      password: pass,
-    });
-    if (data != null && data.token != null) {
-      sessionStorage.setItem("token", data.token);
-      navigate("/");
+    const { data, status } = await axios.post(
+      "http://localhost:8080/auth/login",
+      {
+        email,
+        password: pass,
+      }
+    );
+    console.log(status);
+
+    if (status != 200) {
+      console.log(status);
+      setErrorText("Usuario o Contraseña inválidas");
+      return;
     }
+    sessionStorage.setItem("token", data.token);
+    navigate("/");
   };
 
   return (
@@ -54,6 +63,7 @@ export const AuthComponent = () => {
               onChange={onPassChange}
             />
           </div>
+          <p>{errorText}</p>
           <div className="d-grid gap-2 mt-3">
             <button className="btn btn-primary" onClick={onLogin}>
               Ingresar
